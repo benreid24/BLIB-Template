@@ -44,10 +44,11 @@ private:
 
 int main() {
     BL_LOG_INFO << "Loading application properties";
-    if (!Properties::load()) {
+    if (!Properties.load()) {
         BL_LOG_ERROR << "Failed to load application properties";
         return 1;
     }
+    if (!Properties.save()) { BL_LOG_WARN << "Failed to save application properties"; }
 
     BL_LOG_INFO << "Creating engine instance";
     const bl::engine::Settings engineSettings =
