@@ -32,6 +32,9 @@ public:
             DataDirectory.set(bl::util::FileUtil::getDataDirectory(Constants::AppName));
         }
 
+        DataDirectory.syncToConfig();
+        bl::engine::Configuration::log();
+
         // TODO - SETUP_TASK: validate state here
 
         return true;
