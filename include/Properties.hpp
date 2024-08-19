@@ -32,7 +32,7 @@ public:
             DataDirectory.set(bl::util::FileUtil::getDataDirectory(Constants::AppName));
         }
 
-        // TODO - validate state here
+        // TODO - SETUP_TASK: validate state here
 
         return true;
     }
