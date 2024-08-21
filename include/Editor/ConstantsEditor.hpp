@@ -9,8 +9,9 @@ namespace editor
  * @ingroup Editor
  */
 struct ConstantsEditor {
-    static constexpr unsigned int WindowWidth  = 800;
-    static constexpr unsigned int WindowHeight = 600;
+    static constexpr const char* ConfigFilePath = "editor.cfg";
+    static constexpr unsigned int WindowWidth   = 800;
+    static constexpr unsigned int WindowHeight  = 600;
 };
 
 } // namespace editor

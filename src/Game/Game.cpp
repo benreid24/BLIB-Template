@@ -14,7 +14,7 @@ Game game;
 } // namespace
 
 bool Game::performEarlyStartup(int argc, char** argv) {
-    if (!performSharedEarlyStartup()) { return false; }
+    if (!performSharedEarlyStartup(ConstantsGame::ConfigFilePath)) { return false; }
 
 #ifdef BLIB_DEBUG
     bl::logging::Config::rollLogs("logs", "verbose", 3);
@@ -27,7 +27,8 @@ bool Game::performEarlyStartup(int argc, char** argv) {
 #endif
 
     // if no previous value then use default game specific value
-    if (core::Properties.WindowWidth.get() == core::Constants::UnsetUintProperty) {
+    if (core::Properties.WindowWidth.get() == core::Constants::UnsetUintProperty ||
+        core::Properties.WindowHeight.get() == core::Constants::UnsetUintProperty) {
         core::Properties.WindowWidth.set(ConstantsGame::WindowWidth);
         core::Properties.WindowHeight.set(ConstantsGame::WindowHeight);
     }
@@ -38,22 +39,21 @@ bool Game::performEarlyStartup(int argc, char** argv) {
 }
 
 bl::engine::Settings Game::createStartupParameters() {
-    return bl::engine::Settings()
-        .withWindowParameters(
-            bl::engine::Settings::WindowParameters()
-                .withVideoMode(sf::VideoMode(
-                    core::Properties.WindowWidth.get(), core::Properties.WindowHeight.get(), 32))
-                .withStyle(sf::Style::Close | sf::Style::Titlebar | sf::Style::Resize)
-                .withTitle("BLIB Game") // TODO - SETUP_TASK - set window title
-                .withLetterBoxOnResize(true)
-                .fromConfig())
-        .fromConfig();
+    return bl::engine::Settings().fromConfig().withWindowParameters(
+        bl::engine::Settings::WindowParameters()
+            .withVideoMode(sf::VideoMode(
+                core::Properties.WindowWidth.get(), core::Properties.WindowHeight.get(), 32))
+            .fromConfig()
+            .withStyle(sf::Style::Close | sf::Style::Titlebar | sf::Style::Resize)
+            .withTitle("BLIB Game") // TODO - SETUP_TASK - set window title
+            .withLetterBoxOnResize(true)
+            .withInitialViewSize(
+                sf::Vector2f(ConstantsGame::WindowWidth, ConstantsGame::WindowHeight)));
 }
 
 bool Game::completeStartup(bl::engine::Engine& engine) {
     if (!performSharedStartupCompletion(engine)) { return false; }
 
-    // TODO - SETUP_TASK - setup engine input system
     // TODO - SETUP_TASK - register game specific systems
 
     return true;

@@ -4,3 +4,5 @@ target_sources(Core PUBLIC
     Game.hpp
     Properties.hpp
 )
+
+add_subdirectory(Input)

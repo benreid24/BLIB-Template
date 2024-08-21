@@ -9,8 +9,9 @@ namespace game
  * @ingroup Game
  */
 struct ConstantsGame {
-    static constexpr unsigned int WindowWidth  = 800;
-    static constexpr unsigned int WindowHeight = 600;
+    static constexpr const char* ConfigFilePath = "config.cfg";
+    static constexpr unsigned int WindowWidth   = 800;
+    static constexpr unsigned int WindowHeight  = 600;
 };
 
 } // namespace game

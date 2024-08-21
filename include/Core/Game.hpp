@@ -19,9 +19,10 @@ protected:
     /**
      * @brief Early startup tasks shared by both editor and game go in here
      *
+     * @param configFilename Base filename of the config file in Properties.DataDirectory
      * @return True on success, false to exit
      */
-    bool performSharedEarlyStartup();
+    bool performSharedEarlyStartup(const char* configFilename);
 
     /**
      * @brief Final startup tasks shared by both editor and game go in here

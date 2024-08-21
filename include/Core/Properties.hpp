@@ -4,6 +4,7 @@
 #include <BLIB/Engine/Configuration.hpp>
 #include <BLIB/Engine/Properties.hpp>
 #include <BLIB/Engine/Property.hpp>
+#include <BLIB/Engine/Settings.hpp>
 #include <BLIB/Util/NonCopyable.hpp>
 #include <Core/Constants.hpp>
 #include <string>
@@ -25,22 +26,27 @@ public:
     BLIB_PROPERTY(SpritesheetPath, std::string, "blib.animation.spritesheet_path",
                   Constants::DefaultSpritesheetPath);
 
-    BLIB_PROPERTY(WindowWidth, unsigned int, "app.window.width", Constants::UnsetUintProperty);
-    BLIB_PROPERTY(WindowHeight, unsigned int, "app.window.height", Constants::UnsetUintProperty);
+    BLIB_PROPERTY(WindowWidth, unsigned int, bl::engine::Settings::WindowParameters::WindowWidthKey,
+                  Constants::UnsetUintProperty);
+    BLIB_PROPERTY(WindowHeight, unsigned int,
+                  bl::engine::Settings::WindowParameters::WindowHeightKey,
+                  Constants::UnsetUintProperty);
 
     /**
      * @brief Loads the properties from the config file
      *
+     * @param configFilename Base filename of the config file in Properties.DataDirectory
      * @return True if the properties could be initialized properly
      */
-    bool load();
+    bool load(const char* configFilename);
 
     /**
      * @brief Writes the properties to the config file
      *
+     * @param configFilename Base filename of the config file in Properties.DataDirectory
      * @return True if the file could be written, false on error
      */
-    bool save();
+    bool save(const char* configFilename);
 };
 
 extern PropertiesStore Properties;
