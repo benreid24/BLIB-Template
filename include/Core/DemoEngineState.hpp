@@ -1,9 +1,15 @@
-#include <BLIB/Cameras/2D/Camera2D.hpp>
-#include <BLIB/Engine.hpp>
-#include <BLIB/Graphics.hpp>
-#include <BLIB/Logging.hpp>
-#include <Properties.hpp>
+#ifndef CORE_DEMOENGINESTATE_HPP
+#define CORE_DEMOENGINESTATE_HPP
 
+#include <BLIB/Cameras/2D/Camera2D.hpp>
+#include <BLIB/Engine/Engine.hpp>
+#include <BLIB/Graphics.hpp>
+
+namespace core
+{
+/**
+ * @brief Basic engine state that provides a spinning triangle
+ */
 class DemoEngineState : public bl::engine::State {
 public:
     static constexpr float DegPerSec = 90.f;
@@ -41,35 +47,6 @@ private:
     DemoEngineState()
     : State(bl::engine::StateMask::Running) {}
 };
+} // namespace core
 
-int main() {
-    BL_LOG_INFO << "Loading application properties";
-    if (!Properties.load()) {
-        BL_LOG_ERROR << "Failed to load application properties";
-        return 1;
-    }
-    if (!Properties.save()) { BL_LOG_WARN << "Failed to save application properties"; }
-
-    BL_LOG_INFO << "Creating engine instance";
-    const bl::engine::Settings engineSettings =
-        bl::engine::Settings()
-            .withWindowParameters(
-                bl::engine::Settings::WindowParameters()
-                    .withVideoMode(sf::VideoMode(800, 600, 32))
-                    .withStyle(sf::Style::Close | sf::Style::Titlebar | sf::Style::Resize)
-                    .withTitle("BLIB Project")
-                    .withLetterBoxOnResize(true)
-                    .fromConfig())
-            .fromConfig();
-    bl::engine::Engine engine(engineSettings);
-    BL_LOG_INFO << "Created engine";
-
-    BL_LOG_INFO << "Running engine main loop";
-    if (!engine.run(DemoEngineState::create())) {
-        BL_LOG_ERROR << "Engine exited with error";
-        return 1;
-    }
-
-    BL_LOG_INFO << "Exiting normally";
-    return 0;
-}
+#endif
