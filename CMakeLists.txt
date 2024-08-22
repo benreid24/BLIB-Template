@@ -51,6 +51,9 @@ create_blib_target(
     LINK_LIBRARIES Core
 )
 
+add_executable(Bundler)
+configure_blib_target(Bundler)
+
 include_directories(include)
 add_subdirectory(src)
 add_subdirectory(include)
