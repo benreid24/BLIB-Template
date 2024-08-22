@@ -20,4 +20,4 @@ target_include_directories(ProjectName.t PRIVATE ${PROJECT_SOURCE_DIR}/src)
 target_include_directories(ProjectName.t PRIVATE ${PROJECT_SOURCE_DIR}/lib/BLIB/lib/gtest/googletest/include)
 target_include_directories(ProjectName.t PRIVATE ${PROJECT_SOURCE_DIR}/lib/BLIB/lib/gtest/googlemock/include)
 
-add_test(NAME UnitTests COMMAND ProjectName.T)
+add_test(NAME UnitTests COMMAND ProjectName.t)

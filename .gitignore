@@ -2,3 +2,10 @@
 build
 *.dll
 *.exe
+out
+*.pdb
+*.ilk
+.vs
+logs
+*.spv
+data/

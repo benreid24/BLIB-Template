@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Fix behavior of CMAKE_CXX_STANDARD when targeting macOS.
@@ -14,6 +14,7 @@ project(ProjectName C CXX)
 option(STATIC_LINK "On to link statically" On)
 option(BUILD_TESTS "On to build unit tests" On)
 option(BUILD_EXAMPLES "On to build examples" On)
+option(ON_CI "True when on CI, false when local" Off)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
@@ -21,27 +22,37 @@ endif()
 
 set(CMAKE_INSTALL_PREFIX .)
 
-add_subdirectory(lib/BLIB)
-include_directories(lib/BLIB/include)
-include_directories(lib/BLIB/lib/SFML/include)
-
-add_executable(ProjectName)
-set(STATIC_PROJECT_LINK_FLAG "")
-if (STATIC_LINK)
-    set(STATIC_PROJECT_LINK_FLAG "-static")
+if (ON_CI)
+    add_compile_definitions(ON_CI)
 endif()
 
-target_link_libraries(ProjectName PRIVATE
-    BLIB
+add_subdirectory(lib/BLIB)
 
-    sfml-graphics
-    sfml-window
-    sfml-network
-    sfml-audio
-    sfml-system
+include("lib/BLIB/cmake/set_module_path.cmake")
+set_module_path()
 
-    ${STATIC_PROJECT_LINK_FLAG}
+include(configure_blib_target)
+include(create_blib_target)
+include(link_blib_target)
+
+add_library(Core STATIC)
+configure_blib_target(Core)
+link_blib_target(Core)
+
+create_blib_target(
+    TARGET ProjectName
+    OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+    LINK_LIBRARIES Core
 )
+
+create_blib_target(
+    TARGET ProjectNameEditor
+    OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}"
+    LINK_LIBRARIES Core
+)
+
+add_executable(Bundler)
+configure_blib_target(Bundler)
 
 include_directories(include)
 add_subdirectory(src)
@@ -51,8 +62,3 @@ if (BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
 endif()
-
-set_target_properties(ProjectName
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-)
